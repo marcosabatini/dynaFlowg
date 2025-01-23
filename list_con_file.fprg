@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="append"/>
+        <attribute name="authors" value="marco"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2025-01-22 01:57:24 "/>
+        <attribute name="created" value="bWFyY287UEMtSFAtU0FCQkE7MjAyNS0wMS0wODsiMDQ6Mjc6NTIgIjsyNDU3"/>
+        <attribute name="edited" value="bWFyY287UEMtSFAtU0FCQkE7MjAyNS0wMS0yMjsiMDE6MDg6NDggIjsxO21hcmNvO1BDLUhQLVNBQkJBOzIwMjUtMDEtMjI7IjEyOjM1OjE2ICI7dGVzdGFwcGVuZC5mcHJnOzY2ODg="/>
+        <attribute name="edited" value="bWFyY287UEMtSFAtU0FCQkE7MjAyNS0wMS0yMjsiMDE6NTc6MjQgIjsyMDsyNjA5"/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <call expression="initList()"/>
+            <declare name="inputString" type="String" array="False" size=""/>
+            <declare name="dimLista" type="Integer" array="False" size=""/>
+            <output expression="&quot;aggiungi parole, termina con STOP&quot;" newline="True"/>
+            <input variable="inputString"/>
+            <while expression="inputString != &quot;STOP&quot;">
+                <call expression="appendList(inputString)"/>
+                <input variable="inputString"/>
+            </while>
+            <assign variable="dimLista" expression="getListSize()"/>
+            <declare name="rubrica" type="String" array="True" size="dimLista"/>
+            <call expression="readList(rubrica)"/>
+            <declare name="cercaStringa" type="String" array="False" size=""/>
+            <declare name="i" type="Integer" array="False" size=""/>
+            <declare name="trovato" type="Boolean" array="False" size=""/>
+            <output expression="&quot;quale parola vuoi cercare?&quot;" newline="True"/>
+            <input variable="cercaStringa"/>
+            <assign variable="trovato" expression="false"/>
+            <for variable="i" start="0" end="dimLista-1" direction="inc" step="1">
+                <if expression="rubrica[i] == cercaStringa">
+                    <then>
+                        <assign variable="trovato" expression="true"/>
+                    </then>
+                    <else/>
+                </if>
+            </for>
+            <if expression="trovato">
+                <then>
+                    <output expression="&quot;parola trovata&quot;" newline="True"/>
+                </then>
+                <else>
+                    <output expression="&quot;parola non trovata&quot;" newline="True"/>
+                </else>
+            </if>
+        </body>
+    </function>
+    <function name="appendList" type="None" variable="">
+        <parameters>
+            <parameter name="elem" type="String" array="False"/>
+        </parameters>
+        <body>
+            <declare name="temp" type="String" array="False" size=""/>
+            <declare name="size, i" type="Integer" array="False" size=""/>
+            <assign variable="size" expression="0"/>
+            <open expression="&quot;stack.txt&quot;" mode="read"/>
+            <while expression="!EOF()">
+                <read variable="temp"/>
+                <assign variable="size" expression="size + 1"/>
+            </while>
+            <close mode="read"/>
+            <declare name="array" type="String" array="True" size="size"/>
+            <open expression="&quot;stack.txt&quot;" mode="read"/>
+            <assign variable="i" expression="0"/>
+            <while expression="!EOF()">
+                <read variable="array[i]"/>
+                <assign variable="i" expression="i + 1"/>
+            </while>
+            <close mode="read"/>
+            <open expression="&quot;stack.txt&quot;" mode="write"/>
+            <for variable="i" start="0" end="size-1" direction="inc" step="1">
+                <write expression="array[i]"/>
+            </for>
+            <write expression="elem"/>
+            <close mode="write"/>
+        </body>
+    </function>
+    <function name="getListSize" type="Integer" variable="size">
+        <parameters/>
+        <body>
+            <declare name="size" type="Integer" array="False" size=""/>
+            <declare name="temp" type="String" array="False" size=""/>
+            <assign variable="size" expression="0"/>
+            <open expression="&quot;stack.txt&quot;" mode="read"/>
+            <while expression="!EOF()">
+                <read variable="temp"/>
+                <assign variable="size" expression="size + 1"/>
+            </while>
+            <close mode="read"/>
+            <comment text="tolgo la cima, &quot;HEAD&quot;"/>
+            <assign variable="size" expression="size-1"/>
+        </body>
+    </function>
+    <function name="initList" type="None" variable="">
+        <parameters/>
+        <body>
+            <open expression="&quot;stack.txt&quot;" mode="write"/>
+            <write expression="&quot;HEAD&quot;"/>
+            <close mode="write"/>
+        </body>
+    </function>
+    <function name="readList" type="None" variable="">
+        <parameters>
+            <parameter name="array" type="String" array="True"/>
+        </parameters>
+        <body>
+            <declare name="size, i" type="Integer" array="False" size=""/>
+            <declare name="temp" type="String" array="False" size=""/>
+            <assign variable="size" expression="Size(array)"/>
+            <open expression="&quot;stack.txt&quot;" mode="read"/>
+            <assign variable="i" expression="0"/>
+            <comment text="salta &quot;HEAD&quot;"/>
+            <read variable="temp"/>
+            <while expression="!EOF() or i &lt; size">
+                <read variable="temp"/>
+                <assign variable="array[i]" expression="temp"/>
+                <assign variable="i" expression="i+1"/>
+            </while>
+            <close mode="read"/>
+        </body>
+    </function>
+</flowgorithm>
