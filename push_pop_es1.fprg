@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="append"/>
+        <attribute name="authors" value="marco"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2025-01-26 05:57:16 "/>
+        <attribute name="created" value="bWFyY287UEMtSFAtU0FCQkE7MjAyNS0wMS0wODsiMDQ6Mjc6NTIgIjsyNDU3"/>
+        <attribute name="edited" value="bWFyY287UEMtSFAtU0FCQkE7MjAyNS0wMS0yMjsiMDE6MDg6NDggIjsxO21hcmNvO1BDLUhQLVNBQkJBOzIwMjUtMDEtMjI7IjEyOjM1OjE2ICI7dGVzdGFwcGVuZC5mcHJnOzY2ODg="/>
+        <attribute name="edited" value="bWFyY287UEMtSFAtU0FCQkE7MjAyNS0wMS0yNjsiMDU6NTc6MTYgIjs1MDsyNjIx"/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <call expression="initStack()"/>
+            <declare name="inputString" type="String" array="False" size=""/>
+            <output expression="&quot;inserisci nome, ferma con STOP&quot;" newline="True"/>
+            <input variable="inputString"/>
+            <while expression="inputString &lt;&gt; &quot;STOP&quot;">
+                <call expression="push(inputString)"/>
+                <input variable="inputString"/>
+            </while>
+            <comment text="FINE PRIMA PARTE: INSERIMENTO STRINGHE"/>
+            <comment text="INIZIO SECONDA PARTE"/>
+            <declare name="cercaParola, popped" type="String" array="False" size=""/>
+            <output expression="&quot;quale parola devo cercare?&quot;" newline="True"/>
+            <input variable="cercaParola"/>
+            <do expression="popped &lt;&gt; cercaParola AND popped &lt;&gt; &quot;---EMPTY---&quot;">
+                <assign variable="popped" expression="pop()"/>
+            </do>
+            <if expression="popped == &quot;---EMPTY---&quot;">
+                <then>
+                    <output expression="&quot;parola non trovata&quot;" newline="True"/>
+                </then>
+                <else>
+                    <output expression="&quot;parola trovata&quot;" newline="True"/>
+                </else>
+            </if>
+        </body>
+    </function>
+    <function name="getStackSize" type="Integer" variable="size">
+        <parameters/>
+        <body>
+            <declare name="size" type="Integer" array="False" size=""/>
+            <declare name="temp" type="String" array="False" size=""/>
+            <assign variable="size" expression="0"/>
+            <open expression="&quot;stack.txt&quot;" mode="read"/>
+            <while expression="!EOF()">
+                <read variable="temp"/>
+                <assign variable="size" expression="size + 1"/>
+            </while>
+            <close mode="read"/>
+            <comment text="tolgo la coda, &quot;BOTTOM&quot;"/>
+            <assign variable="size" expression="size-1"/>
+        </body>
+    </function>
+    <function name="initStack" type="None" variable="">
+        <parameters/>
+        <body>
+            <open expression="&quot;stack.txt&quot;" mode="write"/>
+            <write expression="&quot;BOTTOM&quot;"/>
+            <close mode="write"/>
+        </body>
+    </function>
+    <function name="pop" type="String" variable="parola">
+        <parameters/>
+        <body>
+            <declare name="parola, temp" type="String" array="False" size=""/>
+            <declare name="size, i" type="Integer" array="False" size=""/>
+            <assign variable="size" expression="getStackSize()"/>
+            <if expression="size != 0">
+                <then>
+                    <open expression="&quot;stack.txt&quot;" mode="read"/>
+                    <read variable="parola"/>
+                    <if expression="size &gt; 1">
+                        <then>
+                            <declare name="array" type="String" array="True" size="size-1"/>
+                            <assign variable="i" expression="0"/>
+                            <while expression="!EOF() and i &lt; (size-1)">
+                                <read variable="temp"/>
+                                <assign variable="array[i]" expression="temp"/>
+                                <assign variable="i" expression="i+1"/>
+                            </while>
+                            <close mode="read"/>
+                            <open expression="&quot;stack.txt&quot;" mode="write"/>
+                            <for variable="i" start="0" end="size-2" direction="inc" step="1">
+                                <write expression="array[i]"/>
+                            </for>
+                            <write expression="&quot;BOTTOM&quot;"/>
+                            <close mode="write"/>
+                        </then>
+                        <else>
+                            <close mode="read"/>
+                            <call expression="initStack()"/>
+                        </else>
+                    </if>
+                </then>
+                <else>
+                    <comment text="stack vuoto ritorna &quot;---EMPTY---&quot;"/>
+                    <assign variable="parola" expression="&quot;---EMPTY---&quot;"/>
+                </else>
+            </if>
+        </body>
+    </function>
+    <function name="push" type="None" variable="">
+        <parameters>
+            <parameter name="elem" type="String" array="False"/>
+        </parameters>
+        <body>
+            <declare name="stackSize, i" type="Integer" array="False" size=""/>
+            <assign variable="stackSize" expression="getStackSize()"/>
+            <declare name="array" type="String" array="True" size="stackSize+1"/>
+            <declare name="temp" type="String" array="False" size=""/>
+            <open expression="&quot;stack.txt&quot;" mode="read"/>
+            <assign variable="array[0]" expression="elem"/>
+            <assign variable="i" expression="1"/>
+            <while expression="!EOF() and i &lt; (stackSize+1)">
+                <read variable="array[i]"/>
+                <assign variable="i" expression="i + 1"/>
+            </while>
+            <close mode="read"/>
+            <open expression="&quot;stack.txt&quot;" mode="write"/>
+            <for variable="i" start="0" end="stackSize" direction="inc" step="1">
+                <write expression="array[i]"/>
+            </for>
+            <write expression="&quot;BOTTOM&quot;"/>
+            <close mode="write"/>
+        </body>
+    </function>
+</flowgorithm>
